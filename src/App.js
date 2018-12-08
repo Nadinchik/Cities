@@ -1,28 +1,64 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react'
+//import './App.css'
+//import inputCities from './components/inputCities'
+import Cities from './components/Cities'
+
 
 class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      cities: [],
+      currentCity: {
+        name: '',
+        id: '',
+      },
+      activeCity: 0,
+    }
+  }
+  handleInput = e => {
+    const itemName = e.target.value
+    const currentCity = { name: itemName, id:'' }
+    this.setState({
+      currentCity,
+    })
+  }
+  addCity = e => {
+    e.preventDefault()
+    const newCity = this.state.currentCity
+    if (newCity.name !== '') {
+      const cities = [...this.state.cities, newCity]
+      this.setState({
+        cities: cities,
+        currentCity: { name: '', key: '' },
+      })
+    }
+    console.log('Hello')
+  }
   render() {
+    const activeCity = this.state.activeCity;
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
+        <Cities id={'12345'}/>
+        {/*<Cities
+          key={activeCity}
+          id={CITIES[activeCity].id}
+        />
+        {CITIES.map((city, index) =>(
+          <li
+            key={index}
+            onClick={ () => {
+              console.log('Clicked index '+index);
+            }}
           >
-            Learn React
-          </a>
-        </header>
+            {city.name}
+          </li>
+        ))}*/}
       </div>
-    );
+    )
   }
 }
 
-export default App;
+
+
+export default App
