@@ -9,14 +9,14 @@ class App extends Component {
     super()
     this.state = {
       cities: [],
-      currentCity: {
+     /* currentCity: {
         name: '',
         id: '',
-      },
+      },*/
       activeCity: 0,
     }
   }
-  handleInput = e => {
+/*  handleInput = e => {
     const itemName = e.target.value
     const currentCity = { name: itemName, id:'' }
     this.setState({
@@ -34,13 +34,23 @@ class App extends Component {
       })
     }
     console.log('Hello')
-  }
+  }*/
   render() {
-    const activeCity = this.state.activeCity;
+    //const activeCity = this.state.activeCity;
     return (
       <div className="App">
         <Cities id={'12345'}/>
-        {/*<Cities
+        {CITIES.map((cities, index) => (
+          <li
+          key={index}
+          onClick={() => {
+            console.log('Clicked index '+index);
+          }}
+          >
+            {cities.name}
+          </li>
+        ))}
+        /*<Cities
           key={activeCity}
           id={CITIES[activeCity].id}
         />
@@ -53,9 +63,9 @@ class App extends Component {
           >
             {city.name}
           </li>
-        ))}*/}
+        ))}*/
       </div>
-    )
+    );
   }
 }
 
