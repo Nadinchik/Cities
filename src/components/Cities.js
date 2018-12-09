@@ -62,16 +62,16 @@ const CITIES = [
 class Cities extends Component {
   constructor() {
     super();
-    this.state = {
+   /* this.state = {
       CITIES: CITIES
-    };
+    };*/
   }
   render() {
-    const CITIES = this.state.CITIES;
+   // const CITIES = this.state.CITIES;
     return (
-      <div className="CitiesMain">
+      //<div className="CitiesMain">
           <h1>List cities {this.props.id}</h1>
-      </div>
+     // </div>
     );
   }
 }

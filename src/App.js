@@ -2,17 +2,12 @@ import React, {Component} from 'react'
 //import './App.css'
 //import inputCities from './components/inputCities'
 import Cities from './components/Cities'
-
+import CITIES from './components/Cities'
 
 class App extends Component {
   constructor() {
     super()
     this.state = {
-      cities: [],
-     /* currentCity: {
-        name: '',
-        id: '',
-      },*/
       activeCity: 0,
     }
   }
@@ -36,10 +31,9 @@ class App extends Component {
     console.log('Hello')
   }*/
   render() {
-    //const activeCity = this.state.activeCity;
+    const activeCity = this.state.activeCity;
     return (
       <div className="App">
-        <Cities id={'12345'}/>
         {CITIES.map((cities, index) => (
           <li
           key={index}
@@ -50,20 +44,10 @@ class App extends Component {
             {cities.name}
           </li>
         ))}
-        /*<Cities
+        <Cities
           key={activeCity}
-          id={CITIES[activeCity].id}
+          zip={CITIES[activeCity].id}
         />
-        {CITIES.map((city, index) =>(
-          <li
-            key={index}
-            onClick={ () => {
-              console.log('Clicked index '+index);
-            }}
-          >
-            {city.name}
-          </li>
-        ))}*/
       </div>
     );
   }
