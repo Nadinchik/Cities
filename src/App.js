@@ -1,58 +1,18 @@
-import React, {Component} from 'react'
-//import './App.css'
-//import inputCities from './components/inputCities'
-import Cities from './components/Cities'
-import CITIES from './components/Cities'
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import { Switch, Route } from "react-router";
+import Home from "./pages/Home";
+import City from "./pages/City";
 
 class App extends Component {
-  constructor() {
-    super()
-    this.state = {
-      activeCity: 0,
-    }
-  }
-/*  handleInput = e => {
-    const itemName = e.target.value
-    const currentCity = { name: itemName, id:'' }
-    this.setState({
-      currentCity,
-    })
-  }
-  addCity = e => {
-    e.preventDefault()
-    const newCity = this.state.currentCity
-    if (newCity.name !== '') {
-      const cities = [...this.state.cities, newCity]
-      this.setState({
-        cities: cities,
-        currentCity: { name: '', key: '' },
-      })
-    }
-    console.log('Hello')
-  }*/
   render() {
-    const activeCity = this.state.activeCity;
     return (
-      <div className="App">
-        {CITIES.map((cities, index) => (
-          <li
-          key={index}
-          onClick={() => {
-            console.log('Clicked index '+index);
-          }}
-          >
-            {cities.name}
-          </li>
-        ))}
-        <Cities
-          key={activeCity}
-          zip={CITIES[activeCity].id}
-        />
-      </div>
+      <Switch>
+        <Route path='/' exact={true} component={Home}/>
+        <Route path='/city/:id' component={City}/>
+      </Switch>
     );
   }
 }
 
-
-
-export default App
+export default withRouter(App);
