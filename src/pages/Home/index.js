@@ -1,8 +1,9 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, {Component} from "react";
+import {Link} from "react-router-dom";
 import "./styles.scss";
 import cities from "../../localeData";
-
+//import Modal from "react-modal";
+//import {ModalWindow}  from "../../components/Modal/index";
 
 class Home extends Component {
   constructor(props) {
@@ -15,19 +16,21 @@ class Home extends Component {
   render() {
     return (
       <div className="App">
-        {
-          cities.map((city) => (
-            <li key={city.id}>
+        <div className="CitiesMain">
+          <button className="btnAdd" onClick={this.openModal}>+</button>
+          {cities.map((city) => (
+            <li className="CityItem" key={city.id}>
               <Link to={`/city/${city.id}`}>
                 {city.name}
               </Link>
+              <div className="btnItem">
+                <button className="editCity" onClick={this.openModal}>V</button>
+                <button className="delCity">х</button>
+              </div>
             </li>
           ))
-        }
-        {/* <Cities
-          key={activeCity}
-          zip={CITIES[activeCity].id}
-        />*/}
+          }
+        </div>
       </div>
     );
   }

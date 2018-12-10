@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 
 
 
-class Cities extends Component {
+class Index extends Component {
   constructor() {
     super();
     /* this.state = {
@@ -19,7 +19,7 @@ class Cities extends Component {
   }
 }
 
-// class Cities extends Component {
+// class Index extends Component {
 //   componentDidUpdate() {
 //     this.props.inputCity.current.focus()
 //   }
@@ -43,4 +43,4 @@ class Cities extends Component {
 //   }
 // }
 
-export default Cities
+export default Index
