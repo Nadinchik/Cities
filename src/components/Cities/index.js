@@ -5,20 +5,16 @@ import React, {Component} from 'react'
 class Index extends Component {
   constructor() {
     super();
-    /* this.state = {
-       CITIES: CITIES
-     };*/
   }
   render() {
-    // const CITIES = this.state.CITIES;
     return (
-      //<div className="CitiesMain">
       <h1>List cities {this.props.id}</h1>
-      // </div>
     );
   }
 }
 
+
+export default Index
 // class Index extends Component {
 //   componentDidUpdate() {
 //     this.props.inputCity.current.focus()
@@ -43,4 +39,4 @@ class Index extends Component {
 //   }
 // }
 
-export default Index
+

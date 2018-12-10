@@ -17,11 +17,14 @@ class Home extends Component {
     return (
       <div className="App">
         <div className="CitiesMain">
-          <button className="btnAdd" onClick={this.openModal}>+</button>
+          <div className="AddCity">
+            <button className="btnAdd" onClick={this.openModal}>+</button><h3>ADD CITY</h3></div>
           {cities.map((city) => (
             <li className="CityItem" key={city.id}>
               <Link to={`/city/${city.id}`}>
-                {city.name}
+               {city.name}
+               {city.information}
+               {city.coordinates}
               </Link>
               <div className="btnItem">
                 <button className="editCity" onClick={this.openModal}>V</button>

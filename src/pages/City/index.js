@@ -13,7 +13,7 @@ class City extends Component {
   render() {
     const { cityID } = this.state;
     return (
-      <div>
+      <div className="CitiesPage">
         <Link to='/'>Home</Link>
         {
           cities.map(item => {
