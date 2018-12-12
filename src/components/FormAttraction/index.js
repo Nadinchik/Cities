@@ -1,41 +1,41 @@
 import React, { Component } from "react";
 
-class FormCities extends Component {
+class FormAttraction extends Component {
 
   render() {
-    const { city: { text, information, coordinates }, handleInput, addCity, editCity } = this.props;
+    const { attraction: { title, description, rating }, handleInput, addAttr, editAttr } = this.props;
+
     return (
       <div className="FormAdd">
         <form>
           <input name="text"
                  type="text"
-                 value={text}
+                 value={title}
                  onChange={handleInput}
-                 placeholder="City"
+                 placeholder="Attraction"
           />
-          <input name="information"
+          <input name="Description"
                  type="text"
-                 value={information}
+                 value={description}
                  onChange={handleInput}
                  placeholder="Description"
           />
           <input name="coordinates"
-                 type="text"
-                 value={coordinates}
+                 type="number"
+                 value={rating}
                  onChange={handleInput}
-                 placeholder="Coordinates"
           />
           <button
             type="submit"
-            onClick={addCity}
+            onClick={addAttr}
           >
-            ADD CITY
+            ADD
           </button>
           <button
             type="submit"
-            onClick={editCity}
+            onClick={editAttr}
           >
-            Edit
+            Update
           </button>
         </form>
       </div>
@@ -43,4 +43,4 @@ class FormCities extends Component {
   }
 }
 
-export default FormCities;
+export default FormAttraction;
