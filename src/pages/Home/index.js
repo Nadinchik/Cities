@@ -1,32 +1,9 @@
-import React, {Component} from "react";
-import {Link} from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import "./styles.scss";
-import ModalWindow from "../../components/Modal";
-
-
-const customStyles = {
-  content: {
-    position: "absolute",
-    top: "40px",
-    left: "40px",
-    right: "40px",
-    bottom: "40px",
-    border: "1px solid #ccc",
-    overflow: "auto",
-    borderRadius: "4px",
-    outline: "none",
-    padding: "20px",
-  },
-  overlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-  },
-};
+import './styles.scss';
+import ModalWindow from '../../components/Modal';
+import FormCities from '../../components/FormCities';
 
 
 class Home extends Component {
@@ -34,7 +11,7 @@ class Home extends Component {
     super(props);
     const cities = JSON.parse(localStorage.getItem('cities')) || [];
     this.state = {
-      isSave: false,
+      isEdit: false,
       isOpen: false,
       cities,
       city: {
@@ -58,6 +35,7 @@ class Home extends Component {
   toggleModal = () => {
     this.setState(prevState => ({
       isOpen: !prevState.isOpen,
+      isEdit: false,
     }));
   };
 
@@ -83,7 +61,7 @@ class Home extends Component {
   };
 
   editCity = (city) => {
-    this.setState({ city, isOpen: true, isSave: true});
+    this.setState({ city, isOpen: true, isEdit: true});
   };
 
 
@@ -103,11 +81,14 @@ class Home extends Component {
 
 
   render() {
-    const {isOpen, cities, city} = this.state;
+    const {isOpen, cities, city, isEdit} = this.state;
     return (
-      <div className="App">
+      <div className="container">
         <div className="CitiesMain">
-          <button className="btnAdd" onClick={this.toggleModal}>+</button>
+          <button className="btnAdd" onClick={this.toggleModal}>
+            <span className="plus">+</span>
+            <span className="btnAdd__title">Добавить город</span>
+          </button>
           <ul>
             {cities.length > 0 && cities.map((item) => (
               <li className="CityItem" key={item.id}>
@@ -115,13 +96,13 @@ class Home extends Component {
                   pathname: `/city/${item.id}`,
                   state: item,
                 }}>
-                  <span>{item.text}</span>
-                  <span>{item.information}</span>
-                  <span>{item.coordinates}</span>
+                  <span className="CityName">{item.text}</span>
                 </Link>
                 <div className="btnItem">
-                  <button className="editCity" onClick={() => this.editCity(item)}>V</button>
-                  <button className="delCity" onClick={() => this.deleteCity(item.id)}>х</button>
+                  <button className="editCity" onClick={() => this.editCity(item)}>Редактировать
+                  </button>
+                  <button className="delCity" onClick={() => this.deleteCity(item.id)}>Удалить
+                  </button>
                 </div>
               </li>
             ))
@@ -130,13 +111,15 @@ class Home extends Component {
           <ModalWindow
             isOpen={isOpen}
             handleOpen={this.toggleModal}
-            style={customStyles}
-            type="add"
+          >
+          <FormCities
             city={city}
             handleInput={this.handleInput}
             addCity={this.addCity}
             editCity={this.editCity}
+            isEdit={isEdit}
           />
+          </ModalWindow>
         </div>
       </div>
     );

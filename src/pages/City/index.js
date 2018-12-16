@@ -1,64 +1,75 @@
-import React, {Component} from "react";
-import {Link} from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import ModalWindow from "../../components/Modal";
-
+import ModalWindow from '../../components/Modal';
+import FormAttraction from '../../components/FormAttraction';
 
 
 class City extends Component {
   constructor(props) {
     super(props);
-    const arr = JSON.parse(localStorage.getItem('arr')) || [];
+    const cities = JSON.parse(localStorage.getItem('cities')) || [];
     this.state = {
       isOpen: false,
-      arr,
+      cities,
+      allAttractions: [],
       attraction: {
-        title: "",
-        description: "",
-        rating: Number
-      }
+        title: '',
+        description: '',
+        rating: 0,
+      },
     };
   }
 
+  guid = () => {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+
+    return s4() + s4() + '-' + s4();
+  };
+
   addAttr = (e) => {
     e.preventDefault();
-    const {arr: {title, description, rating}, attraction, arr: source} = this.state;
+    const { attraction, attraction: { title, description, rating }, allAttractions } = this.state;
 
-    if ((title !== "") && (description !== "") && (rating !== 0)) {
-      const arr = _.cloneDeep(source);
-      arr.push({...attraction, id: this.guid()});
+    if ((title !== '') && (description !== '') && (rating !== 0)) {
+      let arr = _.cloneDeep(allAttractions);
+      arr.push({ ...attraction, id: this.guid() });
 
-      localStorage.setItem("arr", JSON.stringify(arr));
+      // localStorage.setItem('arr', JSON.stringify(arr));
 
       this.setState(() => ({
         isOpen: false,
-        arr,
+        allAttractions: arr,
         attraction: {
-          title: "",
-          description: "",
-          rating: Number
+          title: '',
+          description: '',
+          rating: 0,
         },
       }));
     }
   };
 
   editAttr = (attraction) => {
-    this.setState({attraction, isOpen: true});
+    this.setState({ attraction, isOpen: true });
   };
 
 
   handleInput = (event) => {
-    const {name, value} = event.target;
-    this.setState(prevState => ({attraction: {...prevState.attraction, [name]: value}}));
+    const { name, value } = event.target;
+    this.setState(prevState => ({ attraction: { ...prevState.attraction, [name]: value } }));
   };
 
 
   deleteAttr = (id) => {
     const arr = [...this.state.arr];
     const updatedList = arr.filter(item => item.id !== id);
-    this.setState({arr: updatedList});
+    this.setState({ arr: updatedList });
 
-    localStorage.setItem("arr", JSON.stringify(updatedList));
+    localStorage.setItem('arr', JSON.stringify(updatedList));
   };
 
 
@@ -69,33 +80,34 @@ class City extends Component {
   };
 
   render() {
-    const {text, information, coordinates, customStyles, attraction} = this.state;
-    const {isOpen, arr} = this.state;
-    console.log(this.state);
+    const { text, information, coordinates, customStyles } = this.props.location.state;
+    const { isOpen, allAttractions, attraction } = this.state;
     return (
-      <div>
-        <Link to='/'>Home</Link>
-        <div className='headerCity'>
-          <button className="btnAdd" onClick={this.toggleModal}>+</button>
+      <div className="container">
+        <Link to="/">Home</Link>
+        <div className="headerCity">
+          <button className="btnAdd" onClick={this.toggleModal}>
+            <span className="plus">+</span>
+            <span className="btnAdd__title">Добавить достопримечательность</span>
+          </button>
         </div>
-        <div className='CityDescription'>
-          <h1>{text}</h1>
-          <h3>{information}</h3>
-          <h3>{coordinates}</h3>
+        <div className="CityDescription">
+          <h1>Название города: {text}</h1>
+          <p>Информация: {information}</p>
+          <h6>Координаты: {coordinates}</h6>
           <ul>
-            {arr.length > 0 && arr.map((item) => (
+            {allAttractions.length > 0 && allAttractions.map((item) => (
               <li className="AttrItem" key={item.id}>
-                <Link to={{
-                  pathname: `/city/${item.id}`,
-                  state: item,
-                }}>
-                  <span>{item.text}</span>
-                  <span>{item.information}</span>
-                  <span>{item.coordinates}</span>
-                </Link>
+                <div>
+                  <h6>Достопримечательность: {item.title}</h6>
+                  <p>Описание: {item.description}</p>
+                  <h6>{item.rating}</h6>
+                </div>
                 <div className="btnItem">
-                  <button className="editAttr" onClick={() => this.editAttr(item)}>V</button>
-                  <button className="delAttr" onClick={() => this.deleteAttr(item.id)}>х</button>
+                  <button className="editCity" onClick={() => this.editAttr(item)}>Редактировать
+                  </button>
+                  <button className="delCity" onClick={() => this.deleteAttr(item.id)}>Удалить
+                  </button>
                 </div>
               </li>
             ))
@@ -105,11 +117,14 @@ class City extends Component {
             isOpen={isOpen}
             handleOpen={this.toggleModal}
             style={customStyles}
-            attraction={attraction}
-            handleInput={this.handleInput}
-            addCity={this.addAttr}
-            editCity={this.editAttr}
-          />
+          >
+            <FormAttraction
+              attraction={attraction}
+              handleInput={this.handleInput}
+              addAttr={this.addAttr}
+              editCity={this.editAttr}
+            />
+          </ModalWindow>
         </div>
       </div>
     );

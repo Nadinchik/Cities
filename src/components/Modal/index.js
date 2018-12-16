@@ -1,33 +1,44 @@
-import React from "react";
-import Modal from "react-modal";
-import FormCities from "../FormCities";
-import FormAttraction from "../FormAttraction";
+import React from 'react';
+import Modal from 'react-modal';
 
-const ModalWindow = ({ children, isOpen, handleOpen, type, city, handleInput, addCity, editCity, attraction, addAttr, editAttr }) => {
+
+
+const customStyles = {
+  content: {
+    position: 'absolute',
+    top: '40px',
+    left: '100px',
+    right: '100px',
+    bottom: 'auto',
+    border: '1px solid #ccc',
+    overflow: 'auto',
+    borderRadius: '4px',
+    outline: 'none',
+    padding: '20px 35px',
+  },
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  },
+};
+
+
+const ModalWindow = ({ children, isOpen, handleOpen }) => {
   return (
     <Modal
       isOpen={isOpen}
       onRequestClose={handleOpen}
       ariaHideApp={false}
+      style={customStyles}
+
     >
-      {
-        type === "add" ? (
-          <FormCities
-            city={city}
-            handleInput={handleInput}
-            addCity={addCity}
-            editCity={editCity}
-          />
-        ) : (<FormAttraction
-          attraction={attraction}
-          handleInput={handleInput}
-          addAttr={addAttr}
-          editCity={editAttr}
-        />)
-      }
       {children}
     </Modal>
-  );
+  )
 };
 
 export default ModalWindow;

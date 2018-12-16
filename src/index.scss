@@ -1,0 +1,193 @@
+body {
+  padding: 0;
+  font-family: sans-serif;
+  margin: 0;
+}
+
+#container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column-reverse;
+}
+
+.CitiesMain {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.CitiesMain li {
+  padding: 7px 15px;
+  list-style: none;
+  text-decoration: none;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #eee;
+  }
+}
+
+
+.CitiesMain li:hover {
+  background: #eee;
+}
+
+.CitiesMain a,
+.CitiesPage a {
+  color: #333333;
+  text-decoration: none;
+}
+
+.CityItem {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.CityItem:hover .btnItem {
+  display: flex;
+}
+
+.CityName {
+  font-size: 20px;
+}
+
+
+.btnItem {
+  display: none;
+  align-items: center;
+}
+
+.btnItem button {
+  font-size: 10px;
+  border: none;
+  background: transparent;
+}
+
+.btnItem button:hover {
+  opacity: .5;
+}
+
+.editCity {
+  color: #3a68c5;
+}
+
+.delCity {
+  color: #c62d2e;
+}
+
+.btnAdd {
+  margin-bottom: 25px;
+  padding: 12px 40px;
+  border-radius: 6px;
+  background: #2e974f;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+
+  .plus {
+    margin-right: 12px;
+  }
+
+  &__title {
+  }
+
+  &:hover {
+    opacity: .7;
+  }
+}
+
+.AddCity {
+  display: flex;
+}
+
+.AddCity h3 {
+  margin-left: 10px;
+}
+
+.CitiesPage a {
+  font-size: 20px;
+  color: #5c9999;
+}
+
+.CitiesPage a:hover {
+  color: #4b7f7f;
+}
+
+
+.headerCity {
+  display: flex;
+  margin: 20px 0 0 0;
+}
+
+.CityDescription {
+  display: flex;
+  flex-direction: column;
+}
+
+.Modal {
+  width: 500px;
+  height: 500px;
+}
+
+.FormAdd {
+
+  input, textarea {
+    width: 100%;
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
+  }
+
+  textarea {
+    height: 90px;
+  }
+}
+
+.buttons {
+  text-align: right;
+
+  button {
+    &:not(:last-child) {
+      margin-right: 12px;
+    }
+  }
+}
+
+.addButton {
+  color: #fff;
+  padding: 5px 35px;
+  background: #356197;
+}
+
+.saveButton {
+  color: #fff;
+  padding: 5px 35px;
+  background: #2e974f;
+}
+
+button, textarea, input {
+  &:focus {
+    outline: none;
+  }
+}
+
+a, button {
+  transition: .2s;
+}
+
+textarea {
+  resize: none;
+}
+
+ul {
+  padding-left: 0;
+}
+
+.container {
+  max-width: 1170px;
+  margin: 0 auto;
+}

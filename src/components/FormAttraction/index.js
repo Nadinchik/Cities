@@ -1,42 +1,56 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class FormAttraction extends Component {
 
   render() {
-    const { attraction: { title, description, rating }, handleInput, addAttr, editAttr } = this.props;
+    const { attraction: { title, description, rating }, handleInput, addAttr, editAttr, isEdit } = this.props;
 
     return (
       <div className="FormAdd">
         <form>
-          <input name="text"
-                 type="text"
-                 value={title}
-                 onChange={handleInput}
-                 placeholder="Attraction"
+          <input
+            name="title"
+            type="text"
+            value={title}
+            onChange={handleInput}
+            placeholder="Attraction"
           />
-          <input name="Description"
-                 type="text"
-                 value={description}
-                 onChange={handleInput}
-                 placeholder="Description"
+          <input
+            name="description"
+            type="text"
+            value={description}
+            onChange={handleInput}
+            placeholder="Description"
           />
-          <input name="coordinates"
-                 type="number"
-                 value={rating}
-                 onChange={handleInput}
+          <input
+            name="rating"
+            type="number"
+            value={rating}
+            onChange={handleInput}
+            max={5}
+            min={0}
           />
-          <button
-            type="submit"
-            onClick={addAttr}
-          >
-            ADD
-          </button>
-          <button
-            type="submit"
-            onClick={editAttr}
-          >
-            Update
-          </button>
+          <div className="buttons">
+
+            {
+              isEdit ?
+                <button
+                  type="submit"
+                  onClick={editAttr}
+                  className="saveButton"
+                >
+                  Сохранить
+                </button> :
+                <button
+                  type="submit"
+                  onClick={addAttr}
+                  className="addButton"
+                >
+                  Добавить
+                </button>
+            }
+          </div>
+
         </form>
       </div>
     );
