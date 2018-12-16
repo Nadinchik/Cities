@@ -11,6 +11,7 @@ class City extends Component {
     const cities = JSON.parse(localStorage.getItem('cities')) || [];
     this.state = {
       isOpen: false,
+      isEdit: false,
       cities,
       allAttractions: [],
       attraction: {
@@ -39,7 +40,7 @@ class City extends Component {
       let arr = _.cloneDeep(allAttractions);
       arr.push({ ...attraction, id: this.guid() });
 
-      // localStorage.setItem('arr', JSON.stringify(arr));
+      localStorage.setItem('arr', JSON.stringify(arr));
 
       this.setState(() => ({
         isOpen: false,
@@ -54,7 +55,7 @@ class City extends Component {
   };
 
   editAttr = (attraction) => {
-    this.setState({ attraction, isOpen: true });
+    this.setState({ attraction, isOpen: true, isEdit: true });
   };
 
 
@@ -76,12 +77,13 @@ class City extends Component {
   toggleModal = () => {
     this.setState(prevState => ({
       isOpen: !prevState.isOpen,
+      isEdit: false,
     }));
   };
 
   render() {
     const { text, information, coordinates, customStyles } = this.props.location.state;
-    const { isOpen, allAttractions, attraction } = this.state;
+    const { isOpen, allAttractions, attraction, isEdit } = this.state;
     return (
       <div className="container">
         <Link to="/">Home</Link>
@@ -101,7 +103,7 @@ class City extends Component {
                 <div>
                   <h6>Достопримечательность: {item.title}</h6>
                   <p>Описание: {item.description}</p>
-                  <h6>{item.rating}</h6>
+                  <h6>Рейтинг: {item.rating}</h6>
                 </div>
                 <div className="btnItem">
                   <button className="editCity" onClick={() => this.editAttr(item)}>Редактировать
@@ -123,6 +125,7 @@ class City extends Component {
               handleInput={this.handleInput}
               addAttr={this.addAttr}
               editCity={this.editAttr}
+              isEdit={isEdit}
             />
           </ModalWindow>
         </div>

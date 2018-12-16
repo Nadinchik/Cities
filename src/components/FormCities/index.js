@@ -16,7 +16,6 @@ class FormCities extends Component {
           />
           <textarea
             name="information"
-            type="text"
             value={information}
             onChange={handleInput}
             placeholder="Description"
