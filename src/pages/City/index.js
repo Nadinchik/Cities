@@ -39,7 +39,7 @@ class City extends Component {
       let arr = _.cloneDeep(allAttractions);
       arr.push({ ...attraction, id: this.guid() });
 
-      // localStorage.setItem('arr', JSON.stringify(arr));
+      localStorage.setItem('arr', JSON.stringify(arr));
 
       this.setState(() => ({
         isOpen: false,
@@ -85,7 +85,9 @@ class City extends Component {
     const { isOpen, allAttractions, attraction, isEdit } = this.state;
     return (
         <div className="container">
-          <Link to="/">Home</Link>
+          <div className="LinkGoBack">
+            <Link to="/">Назад</Link>
+          </div>
           <div className="headerCity">
             <button className="btnAdd" onClick={this.toggleModal}>
               <span className="plus">+</span>
@@ -93,20 +95,22 @@ class City extends Component {
             </button>
           </div>
           <div className="CityDescription">
-            <h1>Название города: {text}</h1>
-            <p>Информация: {information}</p>
-            <h6>Координаты: {coordinates}</h6>
-            <ul>
+            <h1>{text}</h1>
+            <p><span>Информация:</span> {information}</p>
+            <p><span>Координаты:</span> {coordinates}</p>
+            <ul className="ListAttraction">
               {allAttractions.length > 0 && allAttractions.map((item) => (
                   <li className="AttrItem" key={item.id}>
                     <div>
-                      <h6>Достопримечательность: {item.title}</h6>
+                      <h4>Достопримечательность: {item.title}</h4>
                       <p>Описание: {item.description}</p>
-                      <h6>Рейтинг: {item.rating}</h6>
+                      <h4>Рейтинг: {item.rating}</h4>
                     </div>
                     <div className="btnItem">
-                      <button className="editAttr" onClick={() => this.editAttr(item)}>EDIT</button>
-                      <button className="delAttr" onClick={() => this.deleteAttr(item.id)}>х</button>
+                      <button className="editCity" onClick={() => this.editAttr(item)}>Редактировать
+                      </button>
+                      <button className="delCity" onClick={() => this.deleteAttr(item.id)}>Удалить
+                      </button>
                     </div>
                   </li>
               ))

@@ -10,6 +10,11 @@ body {
   flex-direction: column-reverse;
 }
 
+ul, li{
+  text-decoration: none;
+  list-style: none;
+}
+
 .CitiesMain {
   padding: 10px;
   font-size: 16px;
@@ -24,7 +29,6 @@ body {
     border-bottom: 1px solid #eee;
   }
 }
-
 
 .CitiesMain li:hover {
   background: #eee;
@@ -41,7 +45,6 @@ body {
   justify-content: space-between;
 }
 
-
 .CityItem:hover .btnItem {
   display: flex;
 }
@@ -49,7 +52,6 @@ body {
 .CityName {
   font-size: 20px;
 }
-
 
 .btnItem {
   display: none;
@@ -113,15 +115,22 @@ body {
   color: #4b7f7f;
 }
 
-
 .headerCity {
   display: flex;
   margin: 20px 0 0 0;
 }
 
+.LinkGoBack{
+  margin-top: 20px;
+}
+
 .CityDescription {
   display: flex;
   flex-direction: column;
+}
+
+.CityDescription span{
+  font-weight: bold;
 }
 
 .Modal {
@@ -130,7 +139,6 @@ body {
 }
 
 .FormAdd {
-
   input, textarea {
     width: 100%;
     padding: 5px 15px;
@@ -168,6 +176,23 @@ body {
   padding: 5px 35px;
   background: #2e974f;
 }
+
+.ListAttraction{
+  padding: 0;
+  margin: 0;
+}
+
+.AttrItem{
+  display: flex;
+  justify-content: space-between;
+
+  .btnItem {
+    display: flex;
+    align-items: baseline;
+    margin-top: 23px;
+  }
+}
+
 
 button, textarea, input {
   &:focus {
