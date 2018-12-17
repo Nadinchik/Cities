@@ -10,8 +10,8 @@ class City extends Component {
     super(props);
     const cities = JSON.parse(localStorage.getItem('cities')) || [];
     this.state = {
-      isOpen: false,
       isEdit: false,
+      isOpen: false,
       cities,
       allAttractions: [],
       attraction: {
@@ -25,10 +25,9 @@ class City extends Component {
   guid = () => {
     function s4() {
       return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
+          .toString(16)
+          .substring(1);
     }
-
     return s4() + s4() + '-' + s4();
   };
 
@@ -40,7 +39,7 @@ class City extends Component {
       let arr = _.cloneDeep(allAttractions);
       arr.push({ ...attraction, id: this.guid() });
 
-      localStorage.setItem('arr', JSON.stringify(arr));
+      // localStorage.setItem('arr', JSON.stringify(arr));
 
       this.setState(() => ({
         isOpen: false,
@@ -55,7 +54,7 @@ class City extends Component {
   };
 
   editAttr = (attraction) => {
-    this.setState({ attraction, isOpen: true, isEdit: true });
+    this.setState({ attraction, isOpen: true, isEdit: true  });
   };
 
 
@@ -85,51 +84,49 @@ class City extends Component {
     const { text, information, coordinates, customStyles } = this.props.location.state;
     const { isOpen, allAttractions, attraction, isEdit } = this.state;
     return (
-      <div className="container">
-        <Link to="/">Home</Link>
-        <div className="headerCity">
-          <button className="btnAdd" onClick={this.toggleModal}>
-            <span className="plus">+</span>
-            <span className="btnAdd__title">Добавить достопримечательность</span>
-          </button>
+        <div className="container">
+          <Link to="/">Home</Link>
+          <div className="headerCity">
+            <button className="btnAdd" onClick={this.toggleModal}>
+              <span className="plus">+</span>
+              <span className="btnAdd__title">Добавить достопримечательность</span>
+            </button>
+          </div>
+          <div className="CityDescription">
+            <h1>Название города: {text}</h1>
+            <p>Информация: {information}</p>
+            <h6>Координаты: {coordinates}</h6>
+            <ul>
+              {allAttractions.length > 0 && allAttractions.map((item) => (
+                  <li className="AttrItem" key={item.id}>
+                    <div>
+                      <h6>Достопримечательность: {item.title}</h6>
+                      <p>Описание: {item.description}</p>
+                      <h6>Рейтинг: {item.rating}</h6>
+                    </div>
+                    <div className="btnItem">
+                      <button className="editAttr" onClick={() => this.editAttr(item)}>EDIT</button>
+                      <button className="delAttr" onClick={() => this.deleteAttr(item.id)}>х</button>
+                    </div>
+                  </li>
+              ))
+              }
+            </ul>
+            <ModalWindow
+                isOpen={isOpen}
+                handleOpen={this.toggleModal}
+                style={customStyles}
+            >
+              <FormAttraction
+                  attraction={attraction}
+                  handleInput={this.handleInput}
+                  addAttr={this.addAttr}
+                  editCity={this.editAttr}
+                  isEdit={isEdit}
+              />
+            </ModalWindow>
+          </div>
         </div>
-        <div className="CityDescription">
-          <h1>Название города: {text}</h1>
-          <p>Информация: {information}</p>
-          <h6>Координаты: {coordinates}</h6>
-          <ul>
-            {allAttractions.length > 0 && allAttractions.map((item) => (
-              <li className="AttrItem" key={item.id}>
-                <div>
-                  <h6>Достопримечательность: {item.title}</h6>
-                  <p>Описание: {item.description}</p>
-                  <h6>Рейтинг: {item.rating}</h6>
-                </div>
-                <div className="btnItem">
-                  <button className="editCity" onClick={() => this.editAttr(item)}>Редактировать
-                  </button>
-                  <button className="delCity" onClick={() => this.deleteAttr(item.id)}>Удалить
-                  </button>
-                </div>
-              </li>
-            ))
-            }
-          </ul>
-          <ModalWindow
-            isOpen={isOpen}
-            handleOpen={this.toggleModal}
-            style={customStyles}
-          >
-            <FormAttraction
-              attraction={attraction}
-              handleInput={this.handleInput}
-              addAttr={this.addAttr}
-              editCity={this.editAttr}
-              isEdit={isEdit}
-            />
-          </ModalWindow>
-        </div>
-      </div>
     );
   }
 }

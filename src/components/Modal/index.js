@@ -1,8 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
 
-
-
 const customStyles = {
   content: {
     position: 'absolute',
@@ -29,16 +27,15 @@ const customStyles = {
 
 const ModalWindow = ({ children, isOpen, handleOpen }) => {
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={handleOpen}
-      ariaHideApp={false}
-      style={customStyles}
-
-    >
-      {children}
-    </Modal>
-  )
+      <Modal
+          isOpen={isOpen}
+          onRequestClose={handleOpen}
+          ariaHideApp={false}
+          style={customStyles}
+      >
+        {children}
+      </Modal>
+  );
 };
 
 export default ModalWindow;
