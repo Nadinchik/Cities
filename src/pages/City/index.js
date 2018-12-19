@@ -180,6 +180,7 @@ class City extends Component {
                   addAttr={this.addAttr}
                   editCity={this.editAttr}
                   isEdit={isEdit}
+                  onClose={this.toggleModal}
               />
             </ModalWindow>
           </div>

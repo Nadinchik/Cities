@@ -39,10 +39,10 @@ class FormCities extends Component {
             </div>
             <button
                 type="button"
-                className="buttons"
+                className="buttons closeBtn"
                 onClick={onClose}
             >
-              Закрыть
+              X
             </button>
           </form>
         </div>

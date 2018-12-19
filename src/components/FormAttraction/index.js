@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class FormAttraction extends Component {
 
   render() {
-    const { attraction: { title, description, rating }, handleInput, addAttr, editAttr, isEdit } = this.props;
+    const { attraction: { title, description, rating }, onClose,  handleInput, addAttr, editAttr, isEdit } = this.props;
 
     return (
         <div className="FormAdd">
@@ -51,7 +51,13 @@ class FormAttraction extends Component {
               }
 
             </div>
-
+            <button
+                type="button"
+                className="buttons closeBtn"
+                onClick={onClose}
+            >
+              X
+            </button>
           </form>
         </div>
     );
