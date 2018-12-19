@@ -1,26 +1,29 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import './styles.scss';
 import ModalWindow from '../../components/Modal';
-import FormCities from '../../components/FormCities';
+import FormAttraction from '../../components/FormAttraction';
 
 
-class Home extends Component {
+class City extends Component {
   constructor(props) {
     super(props);
+
     const cities = JSON.parse(localStorage.getItem('cities')) || [];
+    const currentCity = _.find(cities, { id: props.match.params.id });
     this.state = {
       isEdit: false,
       isOpen: false,
       cities,
-      city: {
-        text: '',
-        information: '',
-        coordinates: '',
+      currentCity,
+      attraction: {
+        title: '',
+        description: '',
+        rating: 0,
       },
     };
   }
+
 
   guid = () => {
     function s4() {
@@ -32,76 +35,134 @@ class Home extends Component {
   };
 
 
-  toggleModal = () => {
-    this.setState(prevState => ({
-      isOpen: !prevState.isOpen,
-      isEdit: false,
-    }));
-  };
-
-
-  addCity = (e) => {
+  addAttr = (e) => {
     e.preventDefault();
-    const { city: { text, information, coordinates }, city, cities: source } = this.state;
+    const { attraction, attraction: { title, description, rating }, cities, currentCity } = this.state;
 
-    if ((text !== '') && (information !== '') && (coordinates !== '')) {
-      const cities = _.cloneDeep(source);
-      cities.push({ ...city, id: this.guid() });
+    if ((title !== '') && (description !== '') && (rating !== 0)) {
+      let arr = _.cloneDeep(currentCity.allAttractions || []);
+      arr.push({ ...attraction, id: this.guid() });
+      const data = {
+        ...currentCity,
+        allAttractions: arr,
+        popular: this.calcRating(arr),
+      };
+      cities.forEach(({ id, allAttractions }, index) => {
+        if (id === currentCity.id) {
+          cities[index] = data;
+        }
+      });
       localStorage.setItem('cities', JSON.stringify(cities));
 
-      this.setState(() => ({
+      this.setState((prevState) => ({
+        ...prevState,
         isOpen: false,
-        cities,
-        city: {
-          text: '',
-          information: '',
-          coordinates: '',
+        allAttractions: arr,
+        currentCity: data,
+        attraction: {
+          title: '',
+          description: '',
+          rating: 0,
         },
       }));
     }
   };
 
-  editCity = (city) => {
-    this.setState({ city, isOpen: true, isEdit: true });
-  };
-
-  deleteCity = (id) => {
-    const cities = [...this.state.cities];
-    const updatedList = cities.filter(item => item.id !== id);
-    this.setState({ cities: updatedList });
-
-    localStorage.setItem('cities', JSON.stringify(updatedList));
+  editAttr = (attraction) => {
+    this.setState({ attraction, isOpen: true, isEdit: true });
   };
 
 
   handleInput = (event) => {
     const { name, value } = event.target;
-    this.setState(prevState => ({ city: { ...prevState.city, [name]: value } }));
+    this.setState(prevState => ({ attraction: { ...prevState.attraction, [name]: value } }));
   };
 
 
+  deleteAttr = (id) => {
+    const { allAttractions } = this.state.currentCity;
+    const updatedList = allAttractions.filter(item => item.id !== id);
+
+    this.saveCities(updatedList);
+  };
+
+  calcRating = (arr) => {
+    let sum = 0;
+    arr.forEach(({rating}) => {
+      if(arr.rating === null){return sum = 0}
+      sum += _.toNumber(rating)
+    });
+    return _.floor(sum/arr.length);
+
+  };
+
+  saveCities = (arr) => {
+    const {cities, currentCity} = this.state;
+
+    const data = {
+      ...currentCity,
+      allAttractions: arr,
+      popular: this.calcRating(arr)
+    };
+
+    cities.forEach(({ id, allAttractions }, index) => {
+      if (id === currentCity.id) {
+        cities[index] = data;
+      }
+    });
+    localStorage.setItem('cities', JSON.stringify(cities));
+
+    this.setState((prevState) => ({
+      ...prevState,
+      isOpen: false,
+      allAttractions: arr,
+      currentCity: data,
+      attraction: {
+        title: '',
+        description: '',
+        rating: 0,
+      },
+    }));
+  };
+
+
+  toggleModal = () => {
+    this.setState( {
+      isOpen: !this.state.isOpen,
+      isEdit: false,
+    });
+  };
+
   render() {
-    const { isOpen, cities, city, isEdit } = this.state;
+    const { isOpen, attraction, isEdit, currentCity: { text, information, coordinates, popular, allAttractions } } = this.state;
     return (
         <div className="container">
-          <div className="CitiesMain">
+          <div className="LinkGoBack">
+            <Link to="/">Назад</Link>
+          </div>
+          <div className="headerCity">
             <button className="btnAdd" onClick={this.toggleModal}>
               <span className="plus">+</span>
-              <span className="btnAdd__title">Добавить город</span>
+              <span className="btnAdd__title">Добавить достопримечательность</span>
             </button>
-            <ul>
-              {cities.length > 0 && cities.map((item) => (
-                  <li className="CityItem" key={item.id}>
-                    <Link to={{
-                      pathname: `/city/${item.id}`,
-                      state: item,
-                    }}>
-                      <span className="CityName">{item.text}</span>
-                    </Link>
+          </div>
+          <div className="CityDescription">
+            <h1>{text}</h1>
+            <p><span>Информация:</span> {information}</p>
+            <p><span>Координаты:</span> {coordinates}</p>
+            <p><span>Популярность:</span> {popular}</p>
+            <ul className="ListAttraction">
+              {allAttractions && allAttractions.length > 0 && allAttractions.map((item) => (
+                  <li className="AttrItem" key={item.id}>
+                    <div>
+                      <h4>Достопримечательность: {item.title}</h4>
+                      <p>Описание: {item.description}</p>
+                      <h4>Рейтинг: {item.rating}</h4>
+                    </div>
                     <div className="btnItem">
-                      <button className="editCity" onClick={() => this.editCity(item)}>Редактировать
+                      <button className="editCity" onClick={() => this.editAttr(item)}>Редактировать
                       </button>
-                      <button className="delCity" onClick={() => this.deleteCity(item.id)}>Удалить
+                      <button className="delCity" onClick={() => this.deleteAttr(item.id)}>Удалить
                       </button>
                     </div>
                   </li>
@@ -112,12 +173,13 @@ class Home extends Component {
                 isOpen={isOpen}
                 handleOpen={this.toggleModal}
             >
-              <FormCities
-                  city={city}
+              <FormAttraction
+                  attraction={attraction}
                   handleInput={this.handleInput}
-                  addCity={this.addCity}
-                  editCity={this.editCity}
+                  addAttr={this.addAttr}
+                  editCity={this.editAttr}
                   isEdit={isEdit}
+                  onClose={this.toggleModal}
               />
             </ModalWindow>
           </div>
@@ -126,4 +188,5 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default City;
+

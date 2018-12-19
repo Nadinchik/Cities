@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 class FormCities extends Component {
 
   render() {
-    const { city: { text, information, coordinates }, handleInput, addCity, editCity, isEdit } = this.props;
+    const {city: {text, information, coordinates}, handleInput, addCity, editCity, onClose, isEdit} = this.props;
     return (
         <div className="FormAdd">
           <form>
@@ -16,7 +16,6 @@ class FormCities extends Component {
             />
             <textarea
                 name="information"
-                type="text"
                 value={information}
                 onChange={handleInput}
                 placeholder="Description"
@@ -29,27 +28,22 @@ class FormCities extends Component {
                 placeholder="Coordinates"
             />
             <div className="buttons">
-
-              {
-                isEdit ?
-                    <button
-                        type="submit"
-                        onClick={editCity}
-                        className="saveButton"
-                    >
-                      Сохранить
-                    </button> :
-                    <button
-                        type="submit"
-                        onClick={addCity}
-                        className="addButton"
-                    >
-                      Добавить
-                    </button>
-              }
+              <button
+                  type="submit"
+                  onClick={isEdit ? editCity : addCity}
+                  className={isEdit ? 'saveButton' : 'addButton'}
+              >
+                {isEdit ? 'Сохранить' : 'Добавить'}
+              </button>
 
             </div>
-
+            <button
+                type="button"
+                className="buttons"
+                onClick={onClose}
+            >
+              Закрыть
+            </button>
           </form>
         </div>
     );

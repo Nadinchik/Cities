@@ -8,12 +8,14 @@ import FormAttraction from '../../components/FormAttraction';
 class City extends Component {
   constructor(props) {
     super(props);
+
     const cities = JSON.parse(localStorage.getItem('cities')) || [];
+    const currentCity = _.find(cities, { id: props.match.params.id });
     this.state = {
       isEdit: false,
       isOpen: false,
       cities,
-      allAttractions: [],
+      currentCity,
       attraction: {
         title: '',
         description: '',
@@ -22,28 +24,42 @@ class City extends Component {
     };
   }
 
+
   guid = () => {
     function s4() {
       return Math.floor((1 + Math.random()) * 0x10000)
           .toString(16)
           .substring(1);
     }
+
     return s4() + s4() + '-' + s4();
   };
 
+
   addAttr = (e) => {
     e.preventDefault();
-    const { attraction, attraction: { title, description, rating }, allAttractions } = this.state;
+    const { attraction, attraction: { title, description, rating }, cities, currentCity } = this.state;
 
     if ((title !== '') && (description !== '') && (rating !== 0)) {
-      let arr = _.cloneDeep(allAttractions);
+      let arr = _.cloneDeep(currentCity.allAttractions || []);
       arr.push({ ...attraction, id: this.guid() });
+      const data = {
+        ...currentCity,
+        allAttractions: arr,
+        popular: this.calcRating(arr),
+      };
+      cities.forEach(({ id, allAttractions }, index) => {
+        if (id === currentCity.id) {
+          cities[index] = data;
+        }
+      });
+      localStorage.setItem('cities', JSON.stringify(cities));
 
-      localStorage.setItem('arr', JSON.stringify(arr));
-
-      this.setState(() => ({
+      this.setState((prevState) => ({
+        ...prevState,
         isOpen: false,
         allAttractions: arr,
+        currentCity: data,
         attraction: {
           title: '',
           description: '',
@@ -54,7 +70,7 @@ class City extends Component {
   };
 
   editAttr = (attraction) => {
-    this.setState({ attraction, isOpen: true, isEdit: true  });
+    this.setState({ attraction, isOpen: true, isEdit: true });
   };
 
 
@@ -65,11 +81,49 @@ class City extends Component {
 
 
   deleteAttr = (id) => {
-    const arr = [...this.state.arr];
-    const updatedList = arr.filter(item => item.id !== id);
-    this.setState({ arr: updatedList });
+    const { allAttractions } = this.state.currentCity;
+    const updatedList = allAttractions.filter(item => item.id !== id);
 
-    localStorage.setItem('arr', JSON.stringify(updatedList));
+    this.saveCities(updatedList);
+  };
+
+  calcRating = (arr) => {
+    let sum = 0;
+    arr.forEach(({rating}) => {
+      if(arr.rating === null){return sum = 0}
+      sum += _.toNumber(rating)
+    });
+    return _.floor(sum/arr.length);
+
+  };
+
+  saveCities = (arr) => {
+    const {cities, currentCity} = this.state;
+
+    const data = {
+      ...currentCity,
+      allAttractions: arr,
+      popular: this.calcRating(arr)
+    };
+
+    cities.forEach(({ id, allAttractions }, index) => {
+      if (id === currentCity.id) {
+        cities[index] = data;
+      }
+    });
+    localStorage.setItem('cities', JSON.stringify(cities));
+
+    this.setState((prevState) => ({
+      ...prevState,
+      isOpen: false,
+      allAttractions: arr,
+      currentCity: data,
+      attraction: {
+        title: '',
+        description: '',
+        rating: 0,
+      },
+    }));
   };
 
 
@@ -81,8 +135,7 @@ class City extends Component {
   };
 
   render() {
-    const { text, information, coordinates, customStyles } = this.props.location.state;
-    const { isOpen, allAttractions, attraction, isEdit } = this.state;
+    const { isOpen, attraction, isEdit, currentCity: { text, information, coordinates, popular, allAttractions } } = this.state;
     return (
         <div className="container">
           <div className="LinkGoBack">
@@ -98,8 +151,9 @@ class City extends Component {
             <h1>{text}</h1>
             <p><span>Информация:</span> {information}</p>
             <p><span>Координаты:</span> {coordinates}</p>
+            <p><span>Популярность:</span> {popular}</p>
             <ul className="ListAttraction">
-              {allAttractions.length > 0 && allAttractions.map((item) => (
+              {allAttractions && allAttractions.length > 0 && allAttractions.map((item) => (
                   <li className="AttrItem" key={item.id}>
                     <div>
                       <h4>Достопримечательность: {item.title}</h4>
@@ -119,7 +173,6 @@ class City extends Component {
             <ModalWindow
                 isOpen={isOpen}
                 handleOpen={this.toggleModal}
-                style={customStyles}
             >
               <FormAttraction
                   attraction={attraction}
