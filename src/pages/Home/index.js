@@ -72,8 +72,19 @@ class Home extends Component {
     }
   };
 
+  updateText = (text, i) =>{
+    let arr = this.state.cities;
+    arr[i] = text;
+    this.setState({ cities: arr})
+  };
+
   editCity = (city) => {
     this.setState({city, isOpen: true, isEdit: true});
+  };
+
+  saveCity = () =>{
+    this.props.updateText(this.refs.text.value, this.props.index);
+    this.setState({isOpen: false, isEdit: false})
   };
 
   deleteCity = (id) => {
@@ -116,10 +127,10 @@ class Home extends Component {
             <ul>
               <div className="toolbar">
                 <button className="btn btn-default" onClick={this.sortingText}>
-                  Sort by name { 'asc' ? <i className="asc_sort">▼</i> : <i className="desc_sort">▲</i>}
+                  Sort by name { 'asc' ? '▲' : '▼'}
                 </button>
                 <button className="btn btn-default" onClick={this.sortingRating}>
-                  Sort by rating {'asc' ? <i className="asc_sort">▼</i> : <i className='desc_sort'>▲</i>}
+                  Sort by rating {'asc' ? '▲' : '▼'}
                 </button>
               </div>
               {cities.length > 0 && cities.map((item) => (
@@ -150,6 +161,7 @@ class Home extends Component {
                   handleInput={this.handleInput}
                   addCity={this.addCity}
                   editCity={this.editCity}
+                  saveCity={this.saveCity}
                   isEdit={isEdit}
                   onClose={this.toggleModal}
               />

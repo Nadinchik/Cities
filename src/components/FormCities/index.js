@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class FormCities extends Component {
 
   render() {
-    const {city: {text, information, coordinates}, handleInput, addCity, editCity, onClose, isEdit} = this.props;
+    const {city: {text, information, coordinates}, handleInput, addCity, saveCity, onClose, isEdit} = this.props;
     return (
         <div className="FormAdd">
           <form>
@@ -30,7 +30,7 @@ class FormCities extends Component {
             <div className="buttons">
               <button
                   type="submit"
-                  onClick={isEdit ? editCity : addCity}
+                  onClick={isEdit ? saveCity : addCity}
                   className={isEdit ? 'saveButton' : 'addButton'}
               >
                 {isEdit ? 'Сохранить' : 'Добавить'}
