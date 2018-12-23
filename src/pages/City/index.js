@@ -8,7 +8,6 @@ import FormAttraction from '../../components/FormAttraction';
 class City extends Component {
   constructor(props) {
     super(props);
-
     const cities = JSON.parse(localStorage.getItem('cities')) || [];
     const currentCity = _.find(cities, { id: props.match.params.id });
     this.state = {
@@ -31,7 +30,6 @@ class City extends Component {
           .toString(16)
           .substring(1);
     }
-
     return s4() + s4() + '-' + s4();
   };
 
@@ -83,7 +81,6 @@ class City extends Component {
   deleteAttr = (id) => {
     const { allAttractions } = this.state.currentCity;
     const updatedList = allAttractions.filter(item => item.id !== id);
-
     this.saveCities(updatedList);
   };
 
@@ -94,7 +91,6 @@ class City extends Component {
       sum += _.toNumber(rating)
     });
     return _.floor(sum/arr.length);
-
   };
 
   saveCities = (arr) => {
@@ -135,6 +131,7 @@ class City extends Component {
   };
 
   render() {
+    console.log('---', this.state);
     const { isOpen, attraction, isEdit, currentCity: { text, information, coordinates, popular, allAttractions } } = this.state;
     return (
         <div className="container">

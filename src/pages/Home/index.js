@@ -31,7 +31,6 @@ class Home extends Component {
           .toString(16)
           .substring(1);
     }
-
     return s4() + s4() + '-' + s4();
   };
 
@@ -72,26 +71,57 @@ class Home extends Component {
     }
   };
 
-  updateText = (text, i) =>{
-    let arr = this.state.cities;
-    arr[i] = text;
-    this.setState({ cities: arr})
-  };
+  // updateText = (text, i) =>{
+  //   let arr = this.state.city;
+  //   arr[i] = text;
+  //   this.setState({ city: arr})
+  // };
 
   editCity = (city) => {
     this.setState({city, isOpen: true, isEdit: true});
   };
 
-  saveCity = () =>{
-    let val = this.refs.newText.value;
-    let indexText = this.props.index;
-    this.props.updateText(val, indexText);
-    this.setState({
-      text: val,
+  saveCity = (event) => {
+    const {cities, currentCity} = this.state;
+    let val = event.target.value;
+    const data = {
+      ...currentCity,
+    };
+
+    cities.forEach(({id}, index) => {
+      if (id === currentCity.id) {
+        cities[index] = data;
+      }
+    });
+    localStorage.setItem('cities', JSON.stringify(cities));
+
+    this.setState((prevState) => ({
+      ...prevState,
       isOpen: false,
-      isEdit: false
-    })
+      isEdit: false,
+      currentCity: data,
+      city: {
+        text: val,
+        information: '',
+        coordinates: '',
+      },
+    }));
   };
+  // saveCity = (event) =>{
+  //   event.preventDefault();
+  //   const {city: {text, information, coordinates}, cities} = this.state;
+  //   let val = event.target.value;
+  //   let id = this.props.id;
+  //   if ((text !== '') && (information !== '') && (coordinates !== '')) {
+  //     this.props.updateText(val, id);
+  //     // localStorage.setItem('cities', JSON.stringify(city));
+  //     this.setState({
+  //       text: val,
+  //       isOpen: false,
+  //       isEdit: false
+  //     })
+  //   }
+  // };
 
   deleteCity = (id) => {
     const cities = [...this.state.cities];
@@ -123,6 +153,7 @@ class Home extends Component {
 
   render() {
     const { isOpen, cities, city, isEdit} = this.state;
+    console.log('----', this.state);
     return (
         <div className="container">
           <div className="CitiesMain">
