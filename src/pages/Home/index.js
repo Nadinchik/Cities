@@ -83,8 +83,14 @@ class Home extends Component {
   };
 
   saveCity = () =>{
-    this.props.updateText(this.refs.text.value, this.props.index);
-    this.setState({isOpen: false, isEdit: false})
+    let val = this.refs.newText.value;
+    let indexText = this.props.index;
+    this.props.updateText(val, indexText);
+    this.setState({
+      text: val,
+      isOpen: false,
+      isEdit: false
+    })
   };
 
   deleteCity = (id) => {
