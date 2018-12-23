@@ -31,7 +31,6 @@ class FormAttraction extends Component {
                 min={0}
             />
             <div className="buttons">
-
               {
                 isEdit ?
                     <button

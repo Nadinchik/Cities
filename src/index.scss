@@ -203,6 +203,11 @@ ul, li{
     margin-top: 23px;
   }
 }
+.ErrorText{
+  display: inline-block;
+  color: red;
+}
+
 button.closeBtn{
   position: absolute;
   top: 0;
