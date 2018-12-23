@@ -13,6 +13,8 @@ class Home extends Component {
     this.state = {
       isEdit: false,
       isOpen: false,
+      sortByText: 'asc',
+      sortingRating: 'asc',
       cities,
       city: {
         text: '',
@@ -88,15 +90,17 @@ class Home extends Component {
   };
 
   sortingText = () => {
-    const {cities: currentCities} = this.state;
-    const cities = _.orderBy(currentCities, ['text'], ['asc', 'desc']);
-    this.setState({cities});
+    const { cities: currentCities, sortByText: currentOrder } = this.state;
+    const sortByText = currentOrder === 'asc' ? 'desc' : 'asc';
+    const cities = _.orderBy(currentCities, ['text'], [sortByText]);
+    this.setState({ cities, sortByText });
   };
 
   sortingRating = () => {
-    const {cities: currentCities} = this.state;
-    const cities = _.orderBy(currentCities, ['popular'], ['asc', 'desc']);
-    this.setState({cities});
+    const { cities: currentCities, sortByRating: currentOrder } = this.state;
+    const sortByRating = currentOrder === 'asc' ? 'desc' : 'asc';
+    const cities = _.orderBy(currentCities, ['popular'], [sortByRating]);
+    this.setState({ cities, sortByRating });
   };
 
 
@@ -111,11 +115,11 @@ class Home extends Component {
             </button>
             <ul>
               <div className="toolbar">
-                <button className="btn btn-default" onClick={() => this.sortingText('text')}>
-                  Sort by name
+                <button className="btn btn-default" onClick={this.sortingText}>
+                  Sort by name { 'asc' ? <i className="asc_sort">▼</i> : <i className="desc_sort">▲</i>}
                 </button>
-                <button className="btn btn-default" onClick={() => this.sortingRating('popular')}>
-                  Sort by rating
+                <button className="btn btn-default" onClick={this.sortingRating}>
+                  Sort by rating {'asc' ? <i className="asc_sort">▼</i> : <i className='desc_sort'>▲</i>}
                 </button>
               </div>
               {cities.length > 0 && cities.map((item) => (
