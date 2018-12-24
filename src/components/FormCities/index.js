@@ -3,8 +3,7 @@ import React, {Component} from 'react';
 class FormCities extends Component {
 
     render() {
-        const {city: {text, information, coordinates}, handleInput, addCity, saveCity, onClose, isEdit} = this.props;
-        console.log(handleInput);
+        const {city: {text, information, coordinates}, onClose, handleInput, addCity, saveCity, isError, isEdit} = this.props;
         return (
             <div className="FormAdd">
                 <form>
@@ -28,9 +27,6 @@ class FormCities extends Component {
                         onChange={handleInput}
                         placeholder="Coordinates"
                     />
-                    {/*<div className='ErrorText'>*/}
-                        {/*<p>Заполните все поля</p>*/}
-                    {/*</div>*/}
                     <div className="buttons">
                         <button
                             type="submit"
@@ -39,8 +35,11 @@ class FormCities extends Component {
                         >
                             {isEdit ? 'Сохранить' : 'Добавить'}
                         </button>
-
                     </div>
+                    {(isError) &&
+                    <p className="validationForm">Поля не должны быть пустыми</p>
+                    }
+
                     <button
                         type="button"
                         className="buttons closeBtn"
@@ -48,6 +47,7 @@ class FormCities extends Component {
                     >
                         X
                     </button>
+
                 </form>
             </div>
         );
