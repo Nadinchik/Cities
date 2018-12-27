@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 class AttractionItem extends Component {
 
     render() {
-        const {attraction, deleteAttr, editAttr} = this.props;
-
+        const { attraction, deleteAttr, editAttr} = this.props;
         return(
             <li className="AttrItem">
                 <div>

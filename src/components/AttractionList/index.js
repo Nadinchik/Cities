@@ -8,11 +8,11 @@ class AttractionList extends Component {
             <ul className="ListAttraction">
                 {allAttractions && allAttractions.length > 0 && allAttractions.map((item) => (
                     <AttractionItem
+                        attraction={item}
                         key={item.id}
                         title={item.title}
                         description={item.description}
                         rating={item.rating}
-                        allAttractions={allAttractions}
                         editAttr={editAttr}
                         deleteAttr={deleteAttr}
                     />
