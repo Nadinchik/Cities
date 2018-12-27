@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class FormAttraction extends Component {
 
     render() {
-        const {attraction: {title, description, rating}, onClose, handleInput, addAttr, saveAttraction, isError, isEdit} = this.props;
+        const {attraction: {title, description, rating}, onClose, handleInput, checked, addAttr, saveAttraction, isError, isEdit} = this.props;
 
         return (
             <div className="FormAdd">
@@ -27,11 +27,11 @@ class FormAttraction extends Component {
                         type="number"
                         value={rating}
                         onChange={handleInput}
-                        maxLength={5}
+                        onKeyPress={checked}
+                        maxLength={1}
                         max={5}
                         min={0}
                     />
-                    <span className="inputNumber">Введите рейтинг от 0 до 5</span>
                     <div className="buttons">
                         <button
                             type="submit"

@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import _ from 'lodash';
+
+import guid from '../../helpers'
 import ModalWindow from '../../components/Modal';
 import FormAttraction from '../../components/FormAttraction';
+// import AttractionItem from '../../components/AttractionItem';
 
 
 class City extends Component {
@@ -26,17 +29,6 @@ class City extends Component {
     }
 
 
-    guid = () => {
-        function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
-        }
-
-        return s4() + s4() + '-' + s4();
-    };
-
-
     addAttr = (e) => {
         e.preventDefault();
         const {attraction, attraction: {title, description, rating}, cities, currentCity} = this.state;
@@ -45,7 +37,7 @@ class City extends Component {
             (description.trim() || description.length >= 30) &&
             (rating.trim() || rating.length >= 5)) {
             let arr = _.cloneDeep(currentCity.allAttractions || []);
-            arr.push({...attraction, id: this.guid()});
+            arr.push({...attraction, id: guid()});
             const data = {
                 ...currentCity,
                 allAttractions: arr,
@@ -58,8 +50,7 @@ class City extends Component {
             });
             localStorage.setItem('cities', JSON.stringify(cities));
 
-            this.setState((prevState) => ({
-                ...prevState,
+            this.setState(() => ({
                 isOpen: false,
                 isError: false,
                 allAttractions: arr,
@@ -76,7 +67,11 @@ class City extends Component {
     };
 
     editAttr = (attraction) => {
-        this.setState({attraction, isOpen: true, isEdit: true});
+        this.setState({
+            attraction,
+            isOpen: true,
+            isEdit: true
+        });
     };
 
 
@@ -94,11 +89,10 @@ class City extends Component {
     };
 
     calcRating = (arr) => {
-        let sum = 0;
-        arr.forEach(({rating}) => {
-            sum += _.toNumber(rating)
-        });
-        return _.floor(sum / arr.length);
+        let result = arr.reduce((sum, {rating}) => {
+            return sum + _.toNumber(rating)
+        }, 0);
+        return _.floor(result / arr.length);
     };
 
 
@@ -109,11 +103,14 @@ class City extends Component {
             allAttractions: arr,
             popular: this.calcRating(arr)
         };
-        cities.forEach(({id, allAttractions}, index) => {
+
+        cities.some(({id, allAttractions}, index) => {
             if (id === currentCity.id) {
                 cities[index] = data;
-            }
+                return true
+            } else return false
         });
+
         localStorage.setItem('cities', JSON.stringify(cities));
 
         this.setState((prevState) => ({
@@ -136,6 +133,7 @@ class City extends Component {
         if ((title.trim() || title.length >= 30) &&
             (description.trim() || description.length >= 30) &&
             (rating.trim() || rating.length >= 5)) {
+
             let arr = _.cloneDeep(allAttractions);
             let Index = -1;
             arr.forEach(({id: itemId}, index) => {
@@ -159,8 +157,16 @@ class City extends Component {
         }));
     };
 
+    checked = (event) => {
+        event.preventDefault();
+    };
+
+
     render() {
-        const {isOpen, attraction, isEdit, isError, currentCity: {text, information, coordinates, popular, allAttractions}} = this.state;
+        const {
+            isOpen, attraction, isEdit, isError,
+            currentCity: {text, information, coordinates, popular, allAttractions}
+        } = this.state;
         return (
             <div className="container">
                 <div className="LinkGoBack">
@@ -179,18 +185,26 @@ class City extends Component {
                     <p><span>Популярность:</span> {popular}</p>
                     <ul className="ListAttraction">
                         {allAttractions && allAttractions.length > 0 && allAttractions.map((item) => (
+                            // return <AttractionItem
+                            //     key={item.id}
+                            //     title={item.title}
+                            //     description={item.description}
+                            //     rating={item.rating}
+                            //     editAttr={this.editAttr}
+                            //     deleteAttr={this.deleteAttr}
+                            // />
                             <li className="AttrItem" key={item.id}>
-                                <div>
-                                    <h4>Достопримечательность: {item.title}</h4>
-                                    <p>Описание: {item.description}</p>
-                                    <h4>Рейтинг: {item.rating}</h4>
-                                </div>
-                                <div className="btnItem">
-                                    <button className="editCity" onClick={() => this.editAttr(item)}>Редактировать
-                                    </button>
-                                    <button className="delCity" onClick={() => this.deleteAttr(item.id)}>Удалить
-                                    </button>
-                                </div>
+                              <div>
+                                <h4>Достопримечательность: {item.title}</h4>
+                                <p>Описание: {item.description}</p>
+                                <h4>Рейтинг: {item.rating}</h4>
+                              </div>
+                              <div className="btnItem">
+                                <button className="editCity" onClick={() => this.editAttr(item)}>Редактировать
+                                </button>
+                                <button className="delCity" onClick={() => this.deleteAttr(item.id)}>Удалить
+                                </button>
+                              </div>
                             </li>
                         ))
                         }
@@ -203,9 +217,11 @@ class City extends Component {
                             attraction={attraction}
                             handleInput={this.handleInput}
                             addAttr={this.addAttr}
+                            onClose={this.toggleModal}
                             isEdit={isEdit}
                             saveAttraction={this.saveAttraction}
                             isError={isError}
+                            checked={this.checked}
                         />
                     </ModalWindow>
                 </div>

@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import './styles.scss';
+
+import guid from '../../helpers'
 import ModalWindow from '../../components/Modal';
 import FormCities from '../../components/FormCities';
 
@@ -28,15 +30,6 @@ class Home extends Component {
         };
     }
 
-    guid = () => {
-        function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000)
-                .toString(16)
-                .substring(1);
-        }
-        return s4() + s4() + '-' + s4();
-    };
-
 
     toggleModal = () => {
         this.setState(prevState => ({
@@ -50,11 +43,12 @@ class Home extends Component {
     addCity = (e) => {
         e.preventDefault();
         const {city: {text, information, coordinates}, city, cities: source} = this.state;
+
         if ((text.trim() || text.length >= 30) &&
             (information.trim() || information.length >= 30) &&
             (coordinates.trim() || coordinates.length >= 30)){
             const cities = _.cloneDeep(source);
-            cities.push({...city, id: this.guid()});
+            cities.push({ ...city, id: guid() });
             localStorage.setItem('cities', JSON.stringify(cities));
 
             this.setState(() => ({
@@ -79,8 +73,13 @@ class Home extends Component {
         }
     };
 
+
     editCity = (city) => {
-        this.setState({city, isOpen: true, isEdit: true});
+        this.setState({
+            city,
+            isOpen: true,
+            isEdit: true
+        });
     };
 
 
@@ -89,7 +88,7 @@ class Home extends Component {
         const {cities, city, city: {text, information, coordinates}} = this.state;
         if ((text.trim() || text.length >= 30) &&
             (information.trim() || information.length >= 30) &&
-            (coordinates.trim() || coordinates.length >= 30)) {
+            (coordinates.trim() || coordinates.length >= 30)){
             const data = {
                 ...city,
             };
@@ -108,23 +107,23 @@ class Home extends Component {
                 cities,
                 city: data,
             }), () => this.currentSort());
-        } else {
-            this.setState({isError: true})
+        }else {
+            this.setState({ isError: true })
         }
     };
 
 
     deleteCity = (id) => {
-        const cities = [...this.state.cities];
+        const cities = [ ...this.state.cities ];
         const updatedList = cities.filter(item => item.id !== id);
-        this.setState({cities: updatedList});
+        this.setState({ cities: updatedList });
 
         localStorage.setItem('cities', JSON.stringify(updatedList));
     };
 
     handleInput = (event) => {
         const {name, value} = event.target;
-        this.setState(prevState => ({city: {...prevState.city, [name]: value}}));
+        this.setState(prevState => ({city: { ...prevState.city, [name]: value }}));
     };
 
 
@@ -142,9 +141,16 @@ class Home extends Component {
         this.setState({cities, sortByRating, sortType: 'rating'});
     };
 
+    // sortingCities = (text, popular) => {
+    //   const {cities: currentCities, sortByText: currentOrder} = this.state;
+    //   const sortByText = currentOrder === 'asc' ? 'desc' : 'asc';
+    //   const cities = _.orderBy(currentCities, ['text'], [sortByText]);
+    //   this.setState({cities, sortByText, sortType: 'text'});
+    // };
+
     currentSort = () => {
-        const {cities: currentCities, sortType, sortByRating, sortByText} = this.state;
-        const cities = _.orderBy(currentCities, [sortType], [sortType === 'text' ? sortByText : sortByRating]);
+        const { cities: currentCities, sortType, sortByRating, sortByText} = this.state;
+        const cities =_.orderBy(currentCities, [sortType], [sortType === 'text' ? sortByText : sortByRating]);
         this.setState({cities})
     };
 
@@ -161,8 +167,7 @@ class Home extends Component {
                         <button className={sortType === 'text' && 'btn btn-default active'} onClick={this.sortingText}>
                             Sort by name {sortByText === 'asc' ? '▲' : '▼'}
                         </button>
-                        <button className={sortType === 'rating' && 'btn btn-default active'}
-                                onClick={this.sortingRating}>
+                        <button className={sortType === 'rating' && 'btn btn-default active'} onClick={this.sortingRating}>
                             Sort by rating {sortByRating === 'asc' ? '▲' : '▼'}
                         </button>
                     </div>
@@ -189,8 +194,6 @@ class Home extends Component {
                     <ModalWindow
                         isOpen={isOpen}
                         handleOpen={this.toggleModal}
-                        sortByText={this.sortingText}
-                        sortingRating={this.sortingRating}
                     >
                         <FormCities
                             city={city}
