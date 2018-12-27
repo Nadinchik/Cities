@@ -6,6 +6,7 @@ import guid from '../../helpers'
 import ModalWindow from '../../components/Modal';
 import FormAttraction from '../../components/FormAttraction';
 // import AttractionItem from '../../components/AttractionItem';
+import AttractionList from '../../components/AttractionList';
 
 
 class City extends Component {
@@ -183,32 +184,15 @@ class City extends Component {
                     <p><span>Информация:</span> {information}</p>
                     <p><span>Координаты:</span> {coordinates}</p>
                     <p><span>Популярность:</span> {popular}</p>
-                    <ul className="ListAttraction">
-                        {allAttractions && allAttractions.length > 0 && allAttractions.map((item) => (
-                            // return <AttractionItem
-                            //     key={item.id}
-                            //     title={item.title}
-                            //     description={item.description}
-                            //     rating={item.rating}
-                            //     editAttr={this.editAttr}
-                            //     deleteAttr={this.deleteAttr}
-                            // />
-                            <li className="AttrItem" key={item.id}>
-                              <div>
-                                <h4>Достопримечательность: {item.title}</h4>
-                                <p>Описание: {item.description}</p>
-                                <h4>Рейтинг: {item.rating}</h4>
-                              </div>
-                              <div className="btnItem">
-                                <button className="editCity" onClick={() => this.editAttr(item)}>Редактировать
-                                </button>
-                                <button className="delCity" onClick={() => this.deleteAttr(item.id)}>Удалить
-                                </button>
-                              </div>
-                            </li>
-                        ))
-                        }
-                    </ul>
+                    <AttractionList
+                        key={attraction.id}
+                        title={attraction.title}
+                        description={attraction.description}
+                        rating={attraction.rating}
+                        allAttractions={allAttractions}
+                        editAttr={this.editAttr}
+                        deleteAttr={this.deleteAttr}
+                    />
                     <ModalWindow
                         isOpen={isOpen}
                         handleOpen={this.toggleModal}
