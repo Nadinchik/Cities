@@ -5,7 +5,6 @@ import _ from 'lodash';
 import guid from '../../helpers'
 import ModalWindow from '../../components/Modal';
 import FormAttraction from '../../components/FormAttraction';
-// import AttractionItem from '../../components/AttractionItem';
 import AttractionList from '../../components/AttractionList';
 
 
@@ -32,36 +31,14 @@ class City extends Component {
 
     addAttr = (e) => {
         e.preventDefault();
-        const {attraction, attraction: {title, description, rating}, cities, currentCity} = this.state;
-
+        const {attraction, attraction: {title, description, rating}, currentCity} = this.state;
+        console.log('Addthis.state -->', this.state);
         if ((title.trim() || title.length >= 30) &&
             (description.trim() || description.length >= 30) &&
             (rating.trim() || rating.length >= 5)) {
             let arr = _.cloneDeep(currentCity.allAttractions || []);
-            arr.push({...attraction, id: guid()});
-            const data = {
-                ...currentCity,
-                allAttractions: arr,
-                popular: this.calcRating(arr),
-            };
-            cities.forEach(({id, allAttractions}, index) => {
-                if (id === currentCity.id) {
-                    cities[index] = data;
-                }
-            });
-            localStorage.setItem('cities', JSON.stringify(cities));
-
-            this.setState(() => ({
-                isOpen: false,
-                isError: false,
-                allAttractions: arr,
-                currentCity: data,
-                attraction: {
-                    title: '',
-                    description: '',
-                    rating: 0,
-                },
-            }));
+            arr.push({ ...attraction, id: guid() });
+            this.saveCities(arr);
         } else {
             this.setState({isError: true})
         }
@@ -78,7 +55,7 @@ class City extends Component {
 
     handleInput = (event) => {
         const {name, value} = event.target;
-        this.setState(prevState => ({attraction: {...prevState.attraction, [name]: value}}));
+        this.setState(prevState => ({attraction: { ...prevState.attraction, [name]: value }}));
     };
 
 
@@ -116,6 +93,7 @@ class City extends Component {
 
         this.setState((prevState) => ({
             ...prevState,
+            cities,
             isOpen: false,
             isError: false,
             allAttractions: arr,
@@ -158,6 +136,7 @@ class City extends Component {
         }));
     };
 
+
     checked = (event) => {
         event.preventDefault();
     };
@@ -185,10 +164,6 @@ class City extends Component {
                     <p><span>Координаты:</span> {coordinates}</p>
                     <p><span>Популярность:</span> {popular}</p>
                     <AttractionList
-                        key={attraction.id}
-                        title={attraction.title}
-                        description={attraction.description}
-                        rating={attraction.rating}
                         allAttractions={allAttractions}
                         editAttr={this.editAttr}
                         deleteAttr={this.deleteAttr}

@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import AttractionItem from "../AttractionItem";
 
-class AttractionList extends Component {
+class AttractionList extends PureComponent {
     render() {
         const {deleteAttr, editAttr, allAttractions} = this.props;
+        console.log('this.propsList -->', this.props);
         return (
             <ul className="ListAttraction">
                 {allAttractions && allAttractions.length > 0 && allAttractions.map((item) => (
